@@ -16,16 +16,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"   # стабільно з CUDA 11.8
+          python-version: "3.11"   # ← було 3.10, ставимо 3.11
 
       - name: Upgrade pip
         run: python -m pip install -U pip
 
-      # 1) PyTorch із офіційного індексу CUDA 11.8 (ОДИН РЯДОК, без ^)
+      # PyTorch з CUDA 11.8 (одним рядком; без ^, бо PowerShell)
       - name: Install PyTorch (CUDA 11.8 wheels)
         run: pip install --index-url https://download.pytorch.org/whl/cu118 torch==2.7.1+cu118 torchvision==0.22.1+cu118 torchaudio==2.7.1+cu118
 
-      # 2) Інші залежності — без torch*
+      # Інші залежності — без torch*
       - name: Prepare requirements without torch*
         shell: pwsh
         run: |
