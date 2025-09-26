@@ -50,3 +50,4 @@ tokens/
 # --- Файли IDE (Visual Studio Code, PyCharm) ---
 .vscode/
 .idea/
+push_updates.bat
