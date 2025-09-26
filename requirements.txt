@@ -31,3 +31,7 @@ torchaudio==2.7.1+cu118
 torchvision
 torchcrepe==0.0.24
 webrtcvad==2.0.10
+google-generativeai
+vertexai
+google-cloud-storage
+httpx
