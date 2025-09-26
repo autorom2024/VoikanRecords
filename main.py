@@ -5,6 +5,9 @@ from datetime import datetime, timedelta
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QThread, Signal
 
+# === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 1 ===
+import updater # Імпортуємо наш новий модуль для оновлень
+
 from auth_logic import (
     check_user_license, get_machine_id, load_local_license,
     get_google_auth_credentials, get_user_info
@@ -64,6 +67,11 @@ def on_license_check_complete(license_info):
     if license_info and license_info.get('access_granted'):
         main_window = MainWindow(app, license_info)
         main_window.show()
+
+        # === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 2 (після онлайн-перевірки) ===
+        # Запускаємо перевірку оновлень, коли програма вже завантажилась
+        updater.check_for_updates(main_window)
+
     else:
         error_message = license_info.get('message', 'Доступ заборонено або ліцензія неактивна.')
         QMessageBox.critical(None, "Доступ заборонено", error_message)
@@ -98,6 +106,11 @@ def run_app():
         print("Використовується збережена локальна ліцензія. Запуск моментальний.")
         main_window = MainWindow(app, local_license)
         main_window.show()
+
+        # === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 2 (після локальної перевірки) ===
+        # Запускаємо перевірку оновлень, коли програма вже завантажилась
+        updater.check_for_updates(main_window)
+
     else:
         print("Потрібна онлайн-верифікація.")
         splash = SplashScreen()

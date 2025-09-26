@@ -1,73 +1,117 @@
-# updater.py
-from __future__ import annotations
-import json, os, time, webbrowser
-from pathlib import Path
-from typing import Optional
+import sys
+import os
+import json
 import requests
-from packaging.version import Version
-from PySide6.QtWidgets import QMessageBox
+import subprocess
+import zipfile
+import threading
+from pathlib import Path
+from PySide6.QtWidgets import QMessageBox, QProgressDialog
+from PySide6.QtCore import Qt
 
-CHECK_INTERVAL = 60 * 60 * 24  # 1 доба
-TIMEOUT = 2  # сек
+# --- НАЛАШТУВАННЯ ---
+# Поточна версія програми. ЇЇ ТРЕБА МІНЯТИ ВРУЧНУ при кожній новій збірці.
+CURRENT_VERSION = "v1.0.0" 
 
-def _cache_file(app_name: str) -> Path:
-    app = app_name.lower().replace(" ", "_")
-    if os.name == "nt":
-        base = Path(os.getenv("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
-        return base / app / "update.json"
-    elif sys.platform == "darwin":
-        return Path.home() / "Library" / "Caches" / app / "update.json"
-    else:
-        return Path(os.getenv("XDG_CACHE_HOME", Path.home() / ".cache")) / app / "update.json"
+# Твій репозиторій на GitHub
+GITHUB_REPO = "autorom2024/VoikanRecords"
 
-def _should_check(cache_path: Path) -> bool:
+def check_for_updates(main_window):
+    """Перевіряє оновлення у фоновому потоці і показує діалог."""
+    
+    def _worker():
+        print("Перевірка оновлень...")
+        try:
+            # Робимо запит до API GitHub, щоб отримати інформацію про останній реліз
+            url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()
+            
+            latest_meta = response.json()
+            latest_version = latest_meta["tag_name"]
+            
+            print(f"Поточна версія: {CURRENT_VERSION}, остання версія: {latest_version}")
+
+            if latest_version > CURRENT_VERSION:
+                notes = latest_meta.get("body", "Нові виправлення та покращення.")
+                assets = latest_meta.get("assets", [])
+                if not assets:
+                    print("Оновлення знайдене, але в релізі немає файлів для завантаження.")
+                    return
+
+                # Шукаємо наш .zip архів
+                download_asset = None
+                for asset in assets:
+                    if asset['name'].endswith('.zip'):
+                        download_asset = asset
+                        break
+                
+                if not download_asset:
+                    print("Не знайдено .zip архів в останньому релізі.")
+                    return
+
+                reply = QMessageBox.question(main_window, "Є оновлення!",
+                                             f"Доступна нова версія {latest_version}!\n\nЩо нового:\n{notes}\n\nОновитись зараз?",
+                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+                
+                if reply == QMessageBox.Yes:
+                    download_and_install_update(main_window, download_asset)
+
+        except Exception as e:
+            print(f"Не вдалося перевірити оновлення: {e}")
+
+    # Запускаємо перевірку у фоновому потоці, щоб не блокувати інтерфейс
+    update_thread = threading.Thread(target=_worker, daemon=True)
+    update_thread.start()
+
+
+def download_and_install_update(main_window, asset):
+    """Завантажує та встановлює оновлення."""
     try:
-        data = json.loads(cache_path.read_text(encoding="utf-8"))
-        return time.time() - data.get("ts", 0) > CHECK_INTERVAL
-    except Exception:
-        return True
+        download_url = asset["browser_download_url"]
+        filename = asset["name"]
+        
+        app_path = Path(sys.executable)
+        update_path = app_path.parent / filename
+        
+        # Створюємо діалог прогресу
+        progress = QProgressDialog("Завантаження оновлення...", "Скасувати", 0, 100, main_window)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setWindowTitle("Оновлення")
+        progress.show()
 
-def _write_cache(cache_path: Path, latest: str):
-    cache_path.parent.mkdir(parents=True, exist_ok=True)
-    cache_path.write_text(json.dumps({"ts": int(time.time()), "latest": latest}), encoding="utf-8")
+        with requests.get(download_url, stream=True) as r:
+            r.raise_for_status()
+            total_size = int(r.headers.get('content-length', 0))
+            progress.setMaximum(total_size)
+            downloaded_size = 0
+            with open(update_path, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if progress.wasCanceled():
+                        raise Exception("Завантаження скасовано.")
+                    f.write(chunk)
+                    downloaded_size += len(chunk)
+                    progress.setValue(downloaded_size)
 
-def check_update(manifest_url: str, current_version: str, app_name: str) -> Optional[dict]:
-    # вимикач через змінну оточення, напр. MYAPP_NO_UPDATE_CHECK=1
-    if os.getenv(f"{app_name.upper().replace(' ', '_')}_NO_UPDATE_CHECK"):
-        return None
+        progress.setValue(total_size)
+        
+        # Створюємо .bat скрипт для заміни файлів
+        updater_script_path = app_path.parent / "apply_update.bat"
+        with open(updater_script_path, "w", encoding='cp866') as f: # Використовуємо кодування для кирилиці в .bat
+            f.write(f"@echo off\n")
+            f.write(f"chcp 65001 > nul\n") # Переключаємо кодову сторінку на UTF-8
+            f.write(f"echo Очікування закриття Voikan...\n")
+            f.write(f"timeout /t 3 /nobreak > NUL\n")
+            f.write(f"echo Розпакування оновлення...\n")
+            f.write(f'tar -xf "{filename}"\n') # Використовуємо вбудований в Windows tar для розпаковки
+            f.write(f"echo Очищення...\n")
+            f.write(f'del "{filename}"\n') # Видаляємо архів
+            f.write(f"echo Оновлення завершено! Запуск нової версії...\n")
+            f.write(f'start "" "Voikan.exe"\n') # Запускаємо оновлену програму
+            f.write(f"del \"%~f0\"\n") # Самознищення .bat скрипта
 
-    cache = _cache_file(app_name)
-    if not _should_check(cache):
-        return None
+        subprocess.Popen(f'"{updater_script_path}"', shell=True)
+        sys.exit(0) # Закриваємо поточну програму
 
-    try:
-        r = requests.get(manifest_url, timeout=TIMEOUT)
-        r.raise_for_status()
-        data = r.json()
-        latest = str(data["version"])
-        _write_cache(cache, latest)
-        if Version(latest) > Version(current_version):
-            return data  # очікуємо поля version, page_url або download_url
-    except Exception:
-        pass
-    return None
-
-def notify_if_update(update: dict, app_name: str, parent=None):
-    latest = update.get("version", "?")
-    page_url = update.get("page_url") or update.get("url") or update.get("download_url")
-    changelog = update.get("changelog", "")
-    text = f"Доступна нова версія {latest}.\n{changelog}\n\nВідкрити сторінку оновлення?"
-    box = QMessageBox(parent)
-    box.setWindowTitle(f"{app_name} — Оновлення")
-    box.setText(text.strip())
-    yes = box.addButton("Відкрити", QMessageBox.AcceptRole)
-    later = box.addButton("Пізніше", QMessageBox.RejectRole)
-    box.setIcon(QMessageBox.Information)
-    box.exec()
-    if box.clickedButton() is yes and page_url:
-        webbrowser.open(page_url)
-
-def check_and_notify(*, version: str, manifest_url: str, app_name: str, parent=None):
-    upd = check_update(manifest_url, version, app_name)
-    if upd:
-        notify_if_update(upd, app_name, parent)
+    except Exception as e:
+        QMessageBox.critical(main_window, "Помилка оновлення", f"Не вдалося завантажити або встановити оновлення:\n{e}")
