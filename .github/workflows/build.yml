@@ -1,9 +1,10 @@
 name: Build Voikan Records
 
 on:
-  release:
-    types: [created]
-  # Додаємо можливість ручного запуску для тестування
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -22,21 +23,21 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install PySide6 pydub psutil gputil pyinstaller requests
+        pip install PySide6 pyqt6 psutil gputil pynvml pyinstaller requests
 
     - name: Build with PyInstaller
-      run: pyinstaller --onefile --windowed --name "Voikan" --icon="assets/icons/icon.ico" --noconfirm main.py
-    
+      run: pyinstaller --onefile --windowed --name "Voikan" --icon=assets/icons/video.ico --noconfirm main.py
+
     - name: Download and package FFmpeg
       run: |
-        curl -L -o ffmpeg.zip https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+        curl -L -o ffmpeg.zip https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-release-essentials.zip
         7z x ffmpeg.zip -offmpeg_build
-        cp ffmpeg_build/*/bin/ffmpeg.exe dist/
-        
+        cp ffmpeg_build/bin/ffmpeg.exe dist/
+
     - name: Create Release Artifact (ZIP)
       run: |
-        $asset_name = "Voikan_${{ github.event.release.tag_name }}.zip"
-        7z a -tzip $asset_name ./dist/*
+        $asset_name = "Voikan_${{ github.sha }}.zip"
+        7z a "$asset_name" ./dist/*
         echo "ASSET_PATH=$asset_name" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
     - name: Upload Asset to Release
