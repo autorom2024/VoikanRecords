@@ -16,16 +16,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"   # ← було 3.10, ставимо 3.11
+          python-version: "3.11"
 
-      - name: Upgrade pip
-        run: python -m pip install -U pip
+      - name: Upgrade pip + bootstrap build tools
+        run: |
+          python -m pip install -U pip
+          pip install -U setuptools wheel
+          pip install ez_setup
 
-      # PyTorch з CUDA 11.8 (одним рядком; без ^, бо PowerShell)
       - name: Install PyTorch (CUDA 11.8 wheels)
         run: pip install --index-url https://download.pytorch.org/whl/cu118 torch==2.7.1+cu118 torchvision==0.22.1+cu118 torchaudio==2.7.1+cu118
 
-      # Інші залежності — без torch*
       - name: Prepare requirements without torch*
         shell: pwsh
         run: |
@@ -44,8 +45,15 @@ jobs:
       - name: Build exe
         run: pyinstaller --onefile --windowed --name Voikan --icon=assets/icons/video.ico --noconfirm main.py
 
+      - name: Show binary size
+        shell: pwsh
+        run: |
+          $f = Get-Item dist\Voikan.exe
+          Write-Host ("Voikan.exe size: {0:N2} MB" -f ($f.Length/1MB))
+
       - name: Upload artifact (Voikan.exe)
         uses: actions/upload-artifact@v4
         with:
           name: Voikan
           path: dist/Voikan.exe
+
