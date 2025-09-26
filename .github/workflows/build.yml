@@ -21,8 +21,23 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install -U pip
 
+      # 1) Першими ставимо PyTorch з CUDA 11.8 коліс (той самий стек, що у тебе локально)
+      - name: Install PyTorch (CUDA 11.8 wheels)
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cu118 ^
+            torch==2.7.1+cu118 torchvision==0.22.1+cu118 torchaudio==2.7.1+cu118
+
+      # 2) Створюємо тимчасовий requirements без torch*, щоб не зносити встановлене вище
+      - name: Prepare requirements without torch*
+        shell: pwsh
+        run: |
+          Get-Content requirements.txt | Where-Object { $_ -notmatch '^(torch|torchaudio|torchvision)\b' } |
+            Set-Content req_no_torch.txt
+          Write-Host "Filtered requirements:"
+          Get-Content req_no_torch.txt
+
       - name: Install project dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r req_no_torch.txt
 
       - name: Install PyInstaller
         run: pip install pyinstaller
