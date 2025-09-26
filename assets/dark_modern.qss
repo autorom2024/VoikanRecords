@@ -1,0 +1,355 @@
+/*
+ * ===================================================================
+ *             ПОВНА ТЕМА ДЛЯ VOIKAN RECORDS (dark_modern.qss)
+ *                           ФІНАЛЬНА ВЕРСІЯ 3.8
+ * ===================================================================
+*/
+
+/* --- 0. Кастомний заголовок вікна --- */
+#CustomTitleBar {
+    background-color: #1C2128;
+    height: 32px;
+    border-bottom: 1px solid #38414F;
+}
+#titleBarLabel {
+    color: #A0ACC0; 
+    font-size: 13px; 
+    font-weight: 600;
+}
+#updateButton {
+    background-color: transparent;
+    border: none;
+    width: 40px;
+    height: 32px;
+    icon-size: 16px;
+    icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI0EwQUNDMCIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNOS41IDNhLjUuNSAwIDAgMC0xIDB2NC41bC0xLjY0Ni0xLjY0N2EuNS41IDAgMCAwLS43MDggLjcwOGwzLjUgMy41YS41LjUgMCAwIDAgLjcwOCAwbDMuNS0zLjVhLjUuNSAwIDAgMC0uNzA4LS43MDhMMTAuNSA3LjVWM2gtMXoiLz48cGF0aCBkPSJNLCA0LjUgMi41YS41LjUgMCAwIDEgLjUtLjVoNmEuNS41IDAgMCAxIDAgMWgtNmMtMS4xMSAwLTIgLjg5LTIgMnY2YS41LjUgMCAwIDEgLTEgMFY1LjVjMC0xLjY1NyAxLjM0My0zIDMtM3oiLz48L3N2Zz4=);
+}
+#updateButton:hover { 
+    background-color: rgba(255, 255, 255, 15);
+    icon: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI0ZGRkZGRiIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBkPSJNOS41IDNhLjUuNSAwIDAgMC0xIDB2NC41bC0xLjY0Ni0xLjY0N2EuNS41IDAgMCAwLS43MDggLjcwOGwzLjUgMy41YS41LjUgMCAwIDAgLjcwOCAwbDMuNS0zLjVhLjUuNSAwIDAgMC0uNzA4LS43MDhMMTAuNSA3LjVWM2gtMXoiLz48cGF0aCBkPSJNLCA0LjUgMi41YS41LjUgMCAwIDEgLjUtLjVoNmEuNS41IDAgMCAxIDAgMWgtNmMtMS4xMSAwLTIgLjg5LTIgMnY2YS41LjUgMCAwIDEgLTEgMFY1LjVjMC0xLjY1NyAxLjM0My0zIDMtM3oiLz48L3N2Zz4=);
+}
+#minimizeButton, #maximizeButton, #closeButton { 
+    background-color: transparent; 
+    border: none; 
+    color: #A0ACC0; 
+    font-family: "Segoe UI Symbol"; 
+    font-size: 14px; 
+    font-weight: 600; 
+    width: 40px; 
+    height: 32px; 
+}
+#minimizeButton:hover, #maximizeButton:hover { 
+    background-color: rgba(255, 255, 255, 15); 
+}
+#closeButton:hover { 
+    background-color: #E81123; 
+    color: white; 
+}
+
+/* --- 1. Глобальні стилі та логотип --- */
+QMainWindow, QWidget { 
+    background-color: #161A21; 
+    color: #E0E7F1; 
+    font-family: 'Segoe UI', 'Roboto', sans-serif; 
+}
+QLabel#appTitleLabel { 
+    font-size: 24px; 
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #E0E5F1; 
+    background: transparent; 
+    padding-top: 2px; 
+}
+
+/* --- 2. Меню керується glass_item_delegate.py --- */
+
+/* --- 3. Центральна область для сторінок --- */
+QStackedWidget > QWidget { 
+    background-color: #1C2128; 
+    border-radius: 16px; 
+}
+
+/* --- 4. Групи елементів (GroupBox) --- */
+QGroupBox { 
+    background: transparent;
+    border: 1px solid #38414F; 
+    border-radius: 14px; 
+    margin-top: 10px; 
+    color: #8A97A8; 
+    font-weight: 600; 
+    padding: 10px 5px 5px 5px;
+}
+QGroupBox::title { 
+    subcontrol-origin: margin; 
+    subcontrol-position: top center; 
+    padding: 0 8px;
+    background-color: #1C2128;
+}
+
+QGroupBox#apiKeysGroup {
+    background-color: #1C2128;
+}
+
+QGroupBox#apiKeysGroup QLineEdit {
+    background-color: #161A21;
+    border: 1px solid transparent;
+    padding: 7px 10px;
+}
+QGroupBox#apiKeysGroup QLineEdit:hover {
+    border: 1px solid #505A6B;
+}
+QGroupBox#apiKeysGroup QLineEdit:focus {
+    background-color: #242A33;
+    border: 1px solid #3882F6;
+}
+
+/* --- 4.5. Монітор ресурсів --- */
+#systemMonitor { 
+    padding: 5px 0; 
+}
+#statValueLabel { 
+    font-size: 22px; 
+    font-weight: 700; 
+    color: #E0E7F1; 
+}
+#statNameLabel { 
+    font-size: 11px; 
+    font-weight: 600; 
+    color: #8A97A8; 
+    text-transform: uppercase; 
+}
+
+/* --- 5. Текстові написи --- */
+QStackedWidget > QWidget QLabel, QFormLayout > QLabel { 
+    color: #A0ACC0; 
+    font-size: 13px; 
+    font-weight: 500; 
+    background-color: transparent; 
+    padding-right: 10px;
+}
+
+/* --- 6. Поля вводу та списки --- */
+QLineEdit, QComboBox, QSpinBox, QDateTimeEdit, QTextEdit { 
+    background-color: #1E232B; 
+    border: 1px solid #38414F; 
+    border-radius: 8px; 
+    padding: 7px 10px; 
+    color: #E0E7F1; 
+    font-size: 13px; 
+    font-weight: 500; 
+    min-height: 20px; 
+    /* ВИДАЛЕНО: Внутрішня тінь, яка робила текст темним */
+}
+QLineEdit:hover, QComboBox:hover, QSpinBox:hover, QDateTimeEdit:hover, QTextEdit:hover { 
+    border-color: #505A6B; 
+}
+QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDateTimeEdit:focus, QTextEdit:focus { 
+    border-color: #3882F6; 
+    background-color: #242A33; 
+}
+QStackedWidget > QWidget QLineEdit, 
+QStackedWidget > QWidget QComboBox, 
+QStackedWidget > QWidget QSpinBox, 
+QStackedWidget > QWidget QDateTimeEdit { 
+    padding: 4px 8px; 
+    font-size: 12px; 
+}
+QComboBox::down-arrow, QDateTimeEdit::down-arrow, QSpinBox::up-arrow, QSpinBox::down-arrow { 
+    image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI0EwQUNDMCIgY2xhc3M9ImJpIGJpLWNoZXZyb24tZG93biIgdmlld0JveD0iMCAwIDE2IDE2Ij48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI0NyAxMC4xNDdhLjUuNSAwIDAgMS0uNjk4IDBMMzkuOTMyIDYuNTg0YS41LjUgMCAwIDEgLjcwNy0uNzA3TDcuNSA5Ljc5M2wyLjg2NC0yLjyMmEuNS41IDAgMCAxIC43MDcuNzA3bC0zLjQ1NyAzLjU0NHoiLz48L3N2Zz4=); 
+}
+QComboBox::drop-down, QDateTimeEdit::drop-down { 
+    subcontrol-origin: padding; 
+    subcontrol-position: top right; 
+    width: 30px; 
+    border-left-width: 0px; 
+    border-top-right-radius: 8px; 
+    border-bottom-right-radius: 8px; 
+}
+QComboBox QAbstractItemView { 
+    background-color: #242A33; 
+    border: 1px solid #505A6B; 
+    border-radius: 8px; 
+    selection-background-color: #3882F6; 
+    selection-color: #FFFFFF; 
+    outline: 0px; 
+    padding: 4px; 
+}
+
+/* --- 7. Кнопки (QPushButton) --- */
+QPushButton, QToolButton { 
+    background-color: #313843; 
+    color: #E0E7F1; 
+    border: 1px solid #49515E; 
+    border-radius: 8px; 
+    padding: 6px 14px; 
+    font-weight: 600; 
+}
+QPushButton:hover, QToolButton:hover { 
+    background-color: #3E4653; 
+    border-color: #5B6473; 
+}
+QPushButton:pressed, QToolButton:pressed { 
+    background-color: #282E37; 
+}
+QPushButton:disabled, QToolButton:disabled { 
+    background-color: rgba(50, 56, 67, 120); 
+    color: rgba(224, 231, 241, 90); 
+    border-color: rgba(73, 81, 94, 120); 
+}
+QPushButton#startBtn, QPushButton#stopBtn { 
+    color: white; 
+}
+QStackedWidget > QWidget QPushButton, QStackedWidget > QWidget QToolButton { 
+    padding: 4px 12px; 
+    font-size: 12px; 
+    border-radius: 6px;
+}
+QPushButton:checked, QToolButton:checked { 
+    background-color: #3882F6; 
+    border-color: #50A0FF; 
+    color: white; 
+}
+
+/* --- 8. Інші елементи керування --- */
+QProgressBar { 
+    background: rgba(20,24,30,150); 
+    border: 1px solid #38414F; 
+    border-radius: 10px; 
+    text-align: center; 
+    color: #C7D0DC; 
+    min-height: 18px; 
+}
+QProgressBar::chunk { 
+    border-radius: 9px; 
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2da8ff, stop:1 #7cc9ff); 
+}
+QCheckBox, QRadioButton { 
+    color: #A0ACC0; 
+    background-color: transparent; 
+    spacing: 8px; 
+    font-size: 12px; 
+}
+QCheckBox::indicator, QRadioButton::indicator { 
+    width: 18px; 
+    height: 18px; 
+    border: 2px solid #38414F; 
+    border-radius: 4px; 
+}
+QRadioButton::indicator { 
+    border-radius: 9px; 
+}
+QCheckBox::indicator:hover, QRadioButton::indicator:hover { 
+    border-color: #505A6B; 
+}
+QCheckBox::indicator:checked, QRadioButton::indicator:checked { 
+    border-color: #3882F6; 
+    background-color: #3882F6; 
+}
+QCheckBox::indicator:checked { 
+    image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZD0iTTEwLjM1NCA0LjY0NmEuNS41IDAgMCAxIDAgLjcwOEw2LjcwNyA4LjY0NmEuNS41IDAgMCAxLS43MDggMEw0LjY0NiA3LjcwN2EuNS41IDAgMCAxIC43MDgtLjcwOEw2IDcuMjkybDQuMjQzLTQuMjQzYS41LjUgMCAwIDEgLjcwMiAweiIvPjwvc3ZnPg==); 
+}
+QRadioButton::indicator:checked { 
+    image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0id2hpdGUiIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGNpcmNsZSBjeD0iOCIgY3k9IjgiIHI9IjMiLz48L3N2Zz4=); 
+}
+/* === ВИПРАВЛЕНО: Повзунки без чорних полосок === */
+QSlider::groove:horizontal { 
+    border: none; 
+    height: 4px; 
+    background: #1E232B; 
+    border-radius: 2px;
+}
+QSlider::handle:horizontal { 
+    background: #A0ACC0; 
+    border: none;
+    width: 16px; 
+    height: 16px; 
+    margin: -6px 0; /* Vertical centering */
+    border-radius: 8px; 
+}
+QSlider::handle:horizontal:hover { 
+    background: #C0C8D4; 
+}
+QSlider::sub-page:horizontal {
+    background: #3882F6;
+    border-radius: 2px;
+}
+QSlider::add-page:horizontal {
+    background: #3E4653; /* Трохи світліший за groove для кращого ефекту */
+    border-radius: 2px;
+}
+
+
+/* --- 9. Вкладки (Tabs) --- */
+QTabWidget::pane { 
+    border: none; 
+    background-color: transparent; 
+}
+QTabBar::tab { 
+    background: #282E37; 
+    border: 1px solid #38414F; 
+    border-bottom: none; 
+    padding: 6px 16px; 
+    margin-right: 2px; 
+    border-top-left-radius: 8px; 
+    border-top-right-radius: 8px; 
+    color: #A0ACC0; 
+    font-weight: 600; 
+    font-size: 12px; 
+}
+QTabBar::tab:hover { 
+    background: #313843; 
+}
+QTabBar::tab:selected { 
+    background: #1C2128; 
+    color: #E0E7F1; 
+    border-color: #38414F; 
+}
+
+/* --- 10. Таблиці --- */
+QTableView { 
+    background-color: #1E232B; 
+    border: 1px solid #38414F; 
+    border-radius: 8px; 
+    gridline-color: #38414F; 
+    alternate-background-color: #242A33; /* ДОДАНО: Ефект "зебри" */
+}
+QTableView::item { 
+    padding: 5px; 
+    color: #E0E7F1; 
+    border: none; /* Прибираємо індивідуальні рамки, gridline-color достатньо */
+}
+QTableView::item:selected { 
+    background-color: #3882F6; 
+}
+QHeaderView::section { 
+    background-color: #282E37; 
+    border: 1px solid #38414F; 
+    padding: 5px; 
+    font-weight: 600; 
+    color: #A0ACC0; 
+}
+QTableView QScrollBar:vertical { 
+    border: none; 
+    background: #1E232B; 
+    width: 10px; 
+    margin: 0px; 
+}
+QTableView QScrollBar::handle:vertical { 
+    background: #38414F; 
+    min-height: 20px; 
+    border-radius: 5px; 
+}
+QTableView QScrollBar::add-line:vertical, 
+QTableView QScrollBar::sub-line:vertical { 
+    height: 0px; 
+}  
+
+/* --- 11. ДОДАНО: Спливаючі підказки (ToolTip) --- */
+QToolTip {
+    background-color: #161A21;
+    color: #E0E7F1;
+    border: 1px solid #505A6B;
+    padding: 5px;
+    border-radius: 6px;
+    opacity: 230; /* slight transparency */
+}
