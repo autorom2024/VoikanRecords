@@ -2,7 +2,6 @@
 name: Build Windows Application
 
 # Тригери для запуску: цей workflow буде запускатись при кожному push в гілку main
-# або при створенні Pull Request до гілки main.
 on:
   push:
     branches: [ "main" ]
@@ -25,27 +24,26 @@ jobs:
         with:
           python-version: '3.11' # Вкажіть версію Python, яку використовуєте
 
-      # 3. Крок для встановлення залежностей (з виправленням для PyTorch)
+      # 3. Крок для встановлення залежностей (з усіма виправленнями)
       - name: Install dependencies
         run: |
-          # Встановлюємо PyTorch та його компоненти з правильного джерела
+          # ВИПРАВЛЕННЯ 1: Оновлюємо pip, setuptools та wheel, щоб уникнути помилки 'ez_setup'
+          python -m pip install --upgrade pip setuptools wheel
+          
+          # ВИПРАВЛЕННЯ 2: Встановлюємо PyTorch з правильного джерела, щоб уникнути помилки 'HTTP 403'
           pip install torch==2.7.1+cu118 torchaudio==2.7.1+cu118 --index-url https://download.pytorch.org/whl/cu118
+          
           # Встановлюємо решту залежностей з вашого файлу
           pip install -r requirements.txt
-        # Важливо: переконайтесь, що ви видалили torch і torchaudio з requirements.txt
 
       # 4. Крок для збірки .exe файлу за допомогою PyInstaller
       - name: Build executable with PyInstaller
         run: |
           pip install pyinstaller
           # Замініть "main.py" на назву вашого головного Python-файлу
-          # --name Voikan - назва вашого .exe файлу
-          # --onefile - зібрати все в один файл
-          # --windowed - прибрати консольне вікно при запуску
           pyinstaller --name Voikan --onefile --windowed main.py
 
       # 5. Крок для завантаження зібраного файлу як артефакту
-      # Ви зможете завантажити його зі сторінки запуску workflow на GitHub
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
