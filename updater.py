@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 
 # --- НАЛАШТУВАННЯ ---
 # Поточна версія програми. ЇЇ ТРЕБА МІНЯТИ ВРУЧНУ при кожній новій збірці.
-CURRENT_VERSION = "v1.0.0" 
+CURRENT_VERSION = "v1.0.1" 
 
 # Твій репозиторій на GitHub
 GITHUB_REPO = "autorom2024/VoikanRecords"
