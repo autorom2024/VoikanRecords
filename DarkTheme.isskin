@@ -1,0 +1,79 @@
+; DarkTheme.isskin (СПРОЩЕНА І ВИПРАВЛЕНА ВЕРСІЯ)
+
+[Colors]
+TitleColor_Top=$00262626
+TitleColor_Bottom=$00262626
+WizardHeaderColor_Top=$00262626
+WizardHeaderColor_Bottom=$00262626
+CopyrightColor=$00909090
+PnlColor_Top=$00333333
+PnlColor_Bottom=$00333333
+PnlTextColor=$00e2e2e2
+MainTxtColor=$00e2e2e2
+SmallTxtColor=$00e2e2e2
+ComponentsListColor=$002a2a2a
+ComponentsListTextColor=$00e2e2e2
+ComponentsListSelColor=$00404040
+ComponentsListSelTextColor=$00ffffff
+GroupBorderColor=$00505050
+LgsColor_Top=$00404040
+LgsColor_Bottom=$00404040
+LgsTitleColor_Top=$00404040
+LgsTitleColor_Bottom=$00404040
+LgsTitleTextColor=$00ffffff
+LgsTextColor=$00e2e2e2
+PgsTextColor=$00909090
+PgsColor=$002a2a2a
+PgsGaugeColor=$00505050
+PgsGaugeHiColor=$00707070
+PgsGaugeLoColor=$00505050
+BtnColor_Top=$00505050
+BtnColor_Bottom=$00505050
+BtnTextColor=$00e2e2e2
+BtnShadowColor=$002a2a2a
+BtnHiColor_Top=$00656565
+BtnHiColor_Bottom=$00656565
+BtnLightColor=$00707070
+BtnDownColor_Top=$00404040
+BtnDownColor_Bottom=$00404040
+ChkColor=$00e2e2e2
+InputBorderColor=$00505050
+InputColor_Top=$002a2a2a
+InputColor_Bottom=$002a2a2a
+InputTextColor=$00e2e2e2
+ScrollColor_Top=$00404040
+ScrollColor_Bottom=$00404040
+ScrollThumbColor_Top=$00656565
+ScrollThumbColor_Bottom=$00656565
+ScrollArrowColor=$00202020
+
+[Fonts]
+TitleFontName=Segoe UI
+TitleFontSize=12
+TitleFontColor=$00ffffff
+TitleFontCharset=DEFAULT_CHARSET
+CopyrightFontName=Segoe UI
+CopyrightFontSize=9
+CopyrightFontColor=$00909090
+CopyrightFontCharset=DEFAULT_CHARSET
+MainFontName=Segoe UI
+MainFontSize=10
+MainFontColor=$00e2e2e2
+MainFontCharset=DEFAULT_CHARSET
+SmallFontName=Segoe UI
+SmallFontSize=9
+SmallFontColor=$00e2e2e2
+SmallFontCharset=DEFAULT_CHARSET
+BtnFontName=Segoe UI
+BtnFontSize=10
+BtnFontColor=$00e2e2e2
+BtnFontCharset=DEFAULT_CHARSET
+InputFontName=Segoe UI
+InputFontSize=10
+InputFontColor=$00e2e2e2
+InputFontCharset=DEFAULT_CHARSET
+
+[ProgressGauge]
+PgsHeight=18
+PgsStyle=smooth
+PgsSmoothGradient=yes

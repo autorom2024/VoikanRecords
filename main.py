@@ -18,6 +18,9 @@ from ui.main_window import MainWindow
 from ui.splash_screen import SplashScreen
 from ui.theme_loader import load_stylesheet
 
+### <<< НОВИЙ ІМПОРТ ДЛЯ ВІКНА-ЗАСТАВКИ >>> ###
+from ui.heavy_installer_window import HeavyInstallerWindow
+
 os.environ.setdefault("QT_OPENGL", "software")
 os.environ.setdefault("QT_QUICK_BACKEND", "software")
 os.environ.setdefault("QTWEBENGINE_DISABLE_SANDBOX", "1")
@@ -27,6 +30,18 @@ main_window = None
 app = None
 splash = None
 
+### <<< НОВА ФУНКЦІЯ ДЛЯ ПЕРЕВІРКИ БІБЛІОТЕК >>> ###
+def is_heavy_engine_installed():
+    """Перевіряє, чи встановлено PyTorch."""
+    try:
+        import torch
+        print("PyTorch знайдено. Важкий рушій встановлено.")
+        return True
+    except ImportError:
+        print("PyTorch не знайдено. Потрібне встановлення.")
+        return False
+
+# --- ТВОЯ ЛОГІКА (ЗАЛИШАЄТЬСЯ БЕЗ ЗМІН) ---
 class LicenseCheckThread(QThread):
     finished = Signal(dict)
 
@@ -68,15 +83,12 @@ def on_license_check_complete(license_info):
     if license_info and license_info.get('access_granted'):
         main_window = MainWindow(app, license_info)
         main_window.show()
-
-        # === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 2 (після онлайн-перевірки) ===
-        # Запускаємо перевірку оновлень, коли програма вже завантажилась
         updater.check_for_updates(main_window)
-
     else:
         error_message = license_info.get('message', 'Доступ заборонено або ліцензія неактивна.')
         QMessageBox.critical(None, "Доступ заборонено", error_message)
         if app: app.quit()
+# --- КІНЕЦЬ ТВОЄЇ ЛОГІКИ ---
 
 def run_app():
     global main_window, app, splash
@@ -90,6 +102,24 @@ def run_app():
     except Exception as e:
         print(f"Не вдалося завантажити стилі: {e}")
 
+    ### <<< НОВИЙ БЛОК-ПЕРЕВІРКА ПЕРЕД ЗАПУСКОМ ТВОЄЇ ЛОГІКИ >>> ###
+    if not is_heavy_engine_installed():
+        installer_dialog = HeavyInstallerWindow()
+        installer_dialog.show()
+        installer_dialog.start_installation()
+        
+        if not installer_dialog.exec():
+             QMessageBox.critical(None, "Встановлення скасовано", "Необхідні компоненти не були встановлені. Програма буде закрита.")
+             sys.exit(0)
+        
+        QMessageBox.information(None, "Успіх!", "Основні компоненти встановлено.\nБудь ласка, перезапустіть програму, щоб почати роботу.")
+        sys.exit(0)
+    ### <<< КІНЕЦЬ НОВОГО БЛОКУ >>> ###
+
+    # ====================================================================
+    # ВЕСЬ КОД НИЖЧЕ — ЦЕ ТВОЯ ОРИГІНАЛЬНА ЛОГІКА.
+    # ВІН ВИКОНАЄТЬСЯ, ТІЛЬКИ ЯКЩО is_heavy_engine_installed() ПОВЕРНУЛО True
+    # ====================================================================
     machine_id = get_machine_id()
     local_license = load_local_license()
     
@@ -107,11 +137,7 @@ def run_app():
         print("Використовується збережена локальна ліцензія. Запуск моментальний.")
         main_window = MainWindow(app, local_license)
         main_window.show()
-
-        # === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 2 (після локальної перевірки) ===
-        # Запускаємо перевірку оновлень, коли програма вже завантажилась
         updater.check_for_updates(main_window)
-
     else:
         print("Потрібна онлайн-верифікація.")
         splash = SplashScreen()
