@@ -1,4 +1,4 @@
-# setup_logic.py (ФІНАЛЬНА, ПЕРЕВІРЕНА ВЕРСІЯ)
+# setup_logic.py (ФІНАЛЬНА, ВИПРАВЛЕНА ВЕРСІЯ v2)
 import sys
 import os
 import subprocess
@@ -28,7 +28,7 @@ FILES_TO_DOWNLOAD = [
     "helpers_youtube.py",
 
     # --- ПАПКА ASSETS ---
-    "assets/dark_modern.qss",
+    "assets/dark_modern.qss", # <--- ГОЛОВНЕ ВИПРАВЛЕННЯ
 
     # --- ПАПКА UI ---
     "ui/heavy_installer_window.py",
@@ -41,11 +41,11 @@ FILES_TO_DOWNLOAD = [
     "ui/glass_item_delegate.py",
     
     # --- ПАПКА UI/PAGES ---
-    # !!! ЯКЩО У ТЕБЕ Є ФАЙЛИ В ПАПЦІ 'ui/pages', ЇХ ТРЕБА ДОДАТИ СЮДИ !!!
+    # !!! ПЕРЕВІР, ЧИ Є У ТЕБЕ ФАЙЛИ В 'ui/pages' І ДОДАЙ ЇХ, ЯКЩО ПОТРІБНО !!!
     # Наприклад: "ui/pages/page_one.py"
     
     # --- ПАПКА LOGIC ---
-    # !!! ЯКЩО У ТЕБЕ Є ФАЙЛИ В ПАПЦІ 'logic', ЇХ ТРЕБА ДОДАТИ СЮДИ !!!
+    # !!! ПЕРЕВІР, ЧИ Є У ТЕБЕ ФАЙЛИ В 'logic' І ДОДАЙ ЇХ, ЯКЩО ПОТРІБНО !!!
     # Наприклад: "logic/processing.py"
 ]
 # ==============================================================================
