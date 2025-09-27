@@ -1,49 +1,85 @@
-name: Build and Release
+name: Build Inno Setup Installer
 
 on:
   push:
     tags:
-      - "v*.*.*"
-
-# <<< ДОДАНО ЦЕЙ БЛОК
-permissions:
-  contents: write
-# >>> КІНЕЦЬ БЛОКУ
+      - 'v*.*.*'
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: pip install -r requirements.txt --timeout=600
-      - name: Install PyInstaller
-        run: pip install pyinstaller
-      - name: Build executable
-        run: pyinstaller --onefile --name VoikanInstaller main.py
-      - name: Upload artifact
+
+      - name: Download and prepare temp assets
+        run: |
+          mkdir _temp_installer_assets
+          # Створюємо заглушки, бо на GitHub їх тепер не буде
+          python -c "import os; folder='_temp_installer_assets'; os.makedirs(folder, exist_ok=True); open(os.path.join(folder, 'sidebar.bmp'), 'w').close(); open(os.path.join(folder, 'logo_small.bmp'), 'w').close(); open(os.path.join(folder, 'logo.ico'), 'w').close()"
+        shell: bash
+        
+      - name: Download Inno Setup
+        run: |
+          curl -L -o innosetup.exe "https://jrsoftware.org/download.php/is.php?tp"
+        shell: cmd
+
+      - name: Install Inno Setup
+        run: |
+          innosetup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-
+        shell: cmd
+        
+      - name: Add Inno Setup to PATH
+        run: echo "C:\Program Files (x86)\Inno Setup 6" >> $env:GITHUB_PATH
+        shell: pwsh
+        
+      - name: Tweak installer script for CI
+        run: |
+          $content = Get-Content -Path "installer_script.iss" -Raw
+          $newContent = $content -replace '"""D:\\VOIKAN R"""', '"{#SourcePath}"' `
+                                  -replace '#define SourcePath """D:\\VOIKAN R"""', '#define SourcePath GetCurrentDir()'
+          Set-Content -Path "installer_script.iss" -Value $newContent
+        shell: pwsh
+        
+      - name: Compile Installer
+        run: |
+          iscc "installer_script.iss"
+        shell: cmd
+
+      - name: Get installer file name
+        id: get_filename
+        run: |
+          $files = Get-ChildItem -Path "Output" -Filter "*.exe"
+          echo "INSTALLER_NAME=$($files[0].Name)" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+      
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: VoikanInstaller
-          path: dist/VoikanInstaller.exe
+          name: installer
+          path: Output\${{ steps.get_filename.outputs.INSTALLER_NAME }}
 
   release:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: write # Потрібно для створення релізу
+    
     steps:
-      - name: Download artifact
+      - name: Download installer artifact
         uses: actions/download-artifact@v4
         with:
-          name: VoikanInstaller
-          path: ./dist
-      - name: Create Release
+          name: installer
+
+      - name: Get installer file name from artifact
+        id: get_filename
+        run: |
+          files=(*)
+          echo "INSTALLER_NAME=${files[0]}" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ./dist/VoikanInstaller.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ steps.get_filename.outputs.INSTALLER_NAME }}
