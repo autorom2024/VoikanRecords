@@ -1,3 +1,4 @@
+# Це твій файл release.yml, але з виправленнями
 name: Build and Release
 
 on:
@@ -25,13 +26,15 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build executable
-        run: pyinstaller --onefile --name Voikan main.py
+        # ВИПРАВЛЕНО: Змінюємо назву на VoikanInstaller, щоб вона збігалася з updater.py
+        run: pyinstaller --onefile --name VoikanInstaller main.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Voikan
-          path: dist/Voikan.exe
+          # ВИПРАВЛЕНО: Оновлюємо назву та шлях, щоб все було однаково
+          name: VoikanInstaller
+          path: dist/VoikanInstaller.exe
 
   release:
     runs-on: ubuntu-latest
@@ -40,12 +43,14 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: Voikan
+          # ВИПРАВЛЕНО: Використовуємо оновлену назву артефакту
+          name: VoikanInstaller
           path: ./dist
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ./dist/Voikan.exe
+          # ВИПРАВЛЕНО: Вказуємо на файл з правильною назвою для релізу
+          files: ./dist/VoikanInstaller.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
