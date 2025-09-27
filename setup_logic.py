@@ -1,4 +1,4 @@
-# setup_logic.py (ОСТАННЯ ВЕРСІЯ)
+# setup_logic.py (ОСТАТОЧНА, ВИПРАВЛЕНА ВЕРСІЯ)
 import sys
 import os
 import subprocess
@@ -26,7 +26,9 @@ FILES_TO_DOWNLOAD = [
     "google_api.py",
     "google_api_autofill.py",
     "helpers_youtube.py",
-    "dark_modern.qss", # <--- ОСЬ ГОЛОВНЕ ВИПРАВЛЕННЯ (файл в корені)
+
+    # --- ПАПКА ASSETS ---
+    "assets/dark_modern.qss", # <--- ОСЬ ВОНО. ВИПРАВЛЕНО.
 
     # --- ПАПКА UI ---
     "ui/heavy_installer_window.py",
@@ -36,13 +38,7 @@ FILES_TO_DOWNLOAD = [
     "ui/theme_loader.py",
     "ui/custom_title_bar.py",
     "ui/animated_push_button.py",
-    "ui/glass_item_delegate.py",
-    
-    # --- ПАПКА UI/PAGES ---
-    # !!! Перевір, чи є файли в 'ui/pages', і додай їх, якщо потрібно
-    
-    # --- ПАПКА LOGIC ---
-    # !!! Перевір, чи є файли в 'logic', і додай їх, якщо потрібно
+    "ui/glass_item_delegate.py"
 ]
 # ==============================================================================
 
