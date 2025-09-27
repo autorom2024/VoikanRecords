@@ -51,5 +51,4 @@ tokens/
 .vscode/
 .idea/
 push_updates.bat
-requirements-heavy.txt
 _version.txt
