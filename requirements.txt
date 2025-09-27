@@ -1,41 +1,27 @@
-# === Core App & UI ===
-PySide6==6.7.0
-PySide6-Addons==6.7.0
-PySide6-Essentials==6.7.0
-psutil==5.9.8
-
-# === Google APIs & Auth ===
-google-api-python-client==2.128.0
-google-auth==2.29.0
-google-auth-oauthlib==1.2.0
+cryptography==46.0.1
+cachetools==5.5.2
+google-api-python-client==2.181.0
+google-auth==2.40.3
+google-auth-oauthlib==1.2.2
 google-auth-httplib2==0.2.0
-gspread==6.0.2
-oauth2client==4.1.3
-google-generativeai==0.5.4
-vertexai==1.47.0
-google-cloud-storage==2.16.0
+googleapis-common-protos==1.70.0
+gspread==6.2.1
 
-# === Heavy Libs (Audio, AI) ===
-torch==2.3.0+cu118
-torchaudio==2.3.0+cu118
-torchvision==0.18.0+cu118
-# torchcrepe needs numpy < 2.0, so we specify it here
-numpy==1.26.4
-librosa==0.10.2.post1
-pydub==0.25.1
-soundfile==0.12.1
-torchcrepe==0.0.24
-webrtcvad-wheels==2.0.11
-
-# === Media & Other ===
-moviepy==1.0.3
-imageio==2.34.1
-imageio-ffmpeg==0.5.1
+isodate==0.7.2
 mutagen==1.47.0
-openai==1.28.1
-Pillow==10.3.0
-requests==2.31.0
-python-dotenv==1.0.1
-cryptography==42.0.5
-gputil==1.4.0
-httpx==0.27.0
+numpy==2.3.3
+Pillow==11.3.0
+protobuf==5.29.3
+
+psutil==7.0.0
+python-dotenv==1.1.1
+
+# GUI
+PySide6==6.9.2
+PySide6-Addons==6.9.2
+PySide6-Essentials==6.9.2
+
+# HTTP стек (прибито, щоб не колотило resolver)
+requests==2.32.5
+httpx==0.28.1
+urllib3==2.2.3
