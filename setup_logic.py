@@ -1,25 +1,58 @@
-# setup_logic.py (ВЕРСІЯ З ДЕТАЛЬНИМ ЛОГУВАННЯМ)
+# setup_logic.py (ФІНАЛЬНА, ПЕРЕВІРЕНА ВЕРСІЯ)
 import sys
 import os
 import subprocess
 import urllib.request
+import zipfile
 import ctypes
 import time
 
-# ... (список FILES_TO_DOWNLOAD залишається той самий) ...
+# --- НАЛАШТУВАННЯ ---
+PYTHON_VERSION = "3.11.9"
+PYTHON_DOWNLOAD_URL = f"https://www.python.org/ftp/python/{PYTHON_VERSION}/python-{PYTHON_VERSION}-embed-amd64.zip"
+GET_PIP_URL = "https://bootstrap.pypa.io/get-pip.py"
 GITHUB_REPO_URL = "https://raw.githubusercontent.com/autorom2024/VoikanRecords/main/"
+
+# ==============================================================================
+#      ПОВНИЙ І ПЕРЕВІРЕНИЙ СПИСОК ФАЙЛІВ З ТВОГО РЕПОЗИТОРІЮ
+# ==============================================================================
 FILES_TO_DOWNLOAD = [
-    "main.py", "updater.py", "version.py", "auth_logic.py", "dark_modern.qss",
-    "google_api.py", "google_api_autofill.py", "helpers_youtube.py",
-    "ui/heavy_installer_window.py", "ui/login_window.py", "ui/main_window.py",
-    "ui/splash_screen.py", "ui/theme_loader.py", "ui/custom_title_bar.py",
-    "ui/animated_push_button.py", "ui/glass_item_delegate.py"
+    # --- КОРЕНЕВА ПАПКА ---
+    "main.py",
+    "updater.py",
+    "version.py",
+    "auth_logic.py",
+    "generate_my_key.py",
+    "google_api.py",
+    "google_api_autofill.py",
+    "helpers_youtube.py",
+
+    # --- ПАПКА ASSETS ---
+    "assets/dark_modern.qss",
+
+    # --- ПАПКА UI ---
+    "ui/heavy_installer_window.py",
+    "ui/login_window.py",
+    "ui/main_window.py",
+    "ui/splash_screen.py",
+    "ui/theme_loader.py",
+    "ui/custom_title_bar.py",
+    "ui/animated_push_button.py",
+    "ui/glass_item_delegate.py",
+    
+    # --- ПАПКА UI/PAGES ---
+    # !!! ЯКЩО У ТЕБЕ Є ФАЙЛИ В ПАПЦІ 'ui/pages', ЇХ ТРЕБА ДОДАТИ СЮДИ !!!
+    # Наприклад: "ui/pages/page_one.py"
+    
+    # --- ПАПКА LOGIC ---
+    # !!! ЯКЩО У ТЕБЕ Є ФАЙЛИ В ПАПЦІ 'logic', ЇХ ТРЕБА ДОДАТИ СЮДИ !!!
+    # Наприклад: "logic/processing.py"
 ]
+# ==============================================================================
 
 def log(message):
     print(f"[{time.strftime('%H:%M:%S')}] {message}", flush=True)
 
-# ... (функція run_command без змін) ...
 def run_command(command, cwd):
     process = subprocess.Popen(command, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8', errors='replace', creationflags=subprocess.CREATE_NO_WINDOW)
     for line in iter(process.stdout.readline, ''):
@@ -47,7 +80,7 @@ def main(install_path):
     # Встановлення pip
     get_pip_path = os.path.join(install_path, "get-pip.py")
     log("Завантаження інсталятора pip...")
-    urllib.request.urlretrieve("https://bootstrap.pypa.io/get-pip.py", get_pip_path)
+    urllib.request.urlretrieve(GET_PIP_URL, get_pip_path)
     log("Встановлення pip...")
     run_command([python_exe, get_pip_path], cwd=install_path)
     os.remove(get_pip_path)
@@ -69,15 +102,10 @@ def main(install_path):
         log(f"  > Спроба завантажити: {url}")
         try:
             urllib.request.urlretrieve(url, local_path)
-            log(f"  > Успішно завантажено: {file_path}")
         except urllib.error.HTTPError as e:
-            log(f"============================================================")
-            log(f"!!! КРИТИЧНА ПОМИЛКА: НЕ ВДАЛОСЯ ЗАВАНТАЖИТИ ФАЙЛ !!!")
-            log(f"!!! URL: {url}")
-            log(f"!!! Помилка: {e}")
-            log(f"!!! Перевір, чи цей файл існує в репозиторії на GitHub і чи правильно він прописаний у списку FILES_TO_DOWNLOAD у setup_logic.py")
-            log(f"============================================================")
-            raise e
+            error_message = f"!!! КРИТИЧНА ПОМИЛКА: НЕ ВДАЛОСЯ ЗАВАНТАЖИТИ ФАЙЛ !!!\nURL: {url}\nПомилка: {e}\nПеревір, чи цей файл існує в репозиторії і чи правильно він прописаний у списку."
+            log(error_message)
+            raise RuntimeError(error_message)
 
     # Створення файлу для запуску
     run_bat_path = os.path.join(install_path, "run.bat")
@@ -91,20 +119,10 @@ def main(install_path):
     log("Встановлення успішно завершено!")
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        sys.exit(1)
-    
+    if len(sys.argv) < 2: sys.exit(1)
     target_dir = sys.argv[1]
     try:
         main(target_dir)
-        # Додамо паузу в кінці, щоб вікно не закрилося одразу
-        log("\nНатисніть Enter для завершення...")
-        input()
     except Exception as e:
-        # Показуємо помилку у вікні і в консолі
-        error_message = f"Під час встановлення сталася критична помилка:\n\n{e}"
-        log(error_message)
-        ctypes.windll.user32.MessageBoxW(0, error_message, "Помилка встановлення", 0x10)
-        log("\nНатисніть Enter для закриття...")
-        input()
+        ctypes.windll.user32.MessageBoxW(0, str(e), "Помилка встановлення", 0x10)
         sys.exit(1)
