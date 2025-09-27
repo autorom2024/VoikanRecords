@@ -1,4 +1,4 @@
-# setup_logic.py (ФІНАЛЬНА, ВИПРАВЛЕНА ВЕРСІЯ v2)
+# setup_logic.py (ОСТАННЯ ВЕРСІЯ)
 import sys
 import os
 import subprocess
@@ -14,7 +14,7 @@ GET_PIP_URL = "https://bootstrap.pypa.io/get-pip.py"
 GITHUB_REPO_URL = "https://raw.githubusercontent.com/autorom2024/VoikanRecords/main/"
 
 # ==============================================================================
-#      ПОВНИЙ І ПЕРЕВІРЕНИЙ СПИСОК ФАЙЛІВ З ТВОГО РЕПОЗИТОРІЮ
+#      ПОВНИЙ І ВИПРАВЛЕНИЙ СПИСОК ФАЙЛІВ
 # ==============================================================================
 FILES_TO_DOWNLOAD = [
     # --- КОРЕНЕВА ПАПКА ---
@@ -26,9 +26,7 @@ FILES_TO_DOWNLOAD = [
     "google_api.py",
     "google_api_autofill.py",
     "helpers_youtube.py",
-
-    # --- ПАПКА ASSETS ---
-    "assets/dark_modern.qss", # <--- ГОЛОВНЕ ВИПРАВЛЕННЯ
+    "dark_modern.qss", # <--- ОСЬ ГОЛОВНЕ ВИПРАВЛЕННЯ (файл в корені)
 
     # --- ПАПКА UI ---
     "ui/heavy_installer_window.py",
@@ -41,12 +39,10 @@ FILES_TO_DOWNLOAD = [
     "ui/glass_item_delegate.py",
     
     # --- ПАПКА UI/PAGES ---
-    # !!! ПЕРЕВІР, ЧИ Є У ТЕБЕ ФАЙЛИ В 'ui/pages' І ДОДАЙ ЇХ, ЯКЩО ПОТРІБНО !!!
-    # Наприклад: "ui/pages/page_one.py"
+    # !!! Перевір, чи є файли в 'ui/pages', і додай їх, якщо потрібно
     
     # --- ПАПКА LOGIC ---
-    # !!! ПЕРЕВІР, ЧИ Є У ТЕБЕ ФАЙЛИ В 'logic' І ДОДАЙ ЇХ, ЯКЩО ПОТРІБНО !!!
-    # Наприклад: "logic/processing.py"
+    # !!! Перевір, чи є файли в 'logic', і додай їх, якщо потрібно
 ]
 # ==============================================================================
 
