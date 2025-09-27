@@ -7,6 +7,7 @@ from PySide6.QtCore import QThread, Signal
 
 # === ІНТЕГРАЦІЯ ОНОВЛЕННЯ: Крок 1 ===
 import updater # Імпортуємо наш новий модуль для оновлень
+from version import __version__ # Імпортуємо поточну версію
 
 from auth_logic import (
     check_user_license, get_machine_id, load_local_license,
@@ -125,4 +126,3 @@ def run_app():
 
 if __name__ == "__main__":
     run_app()
-# це тестова змісjл
