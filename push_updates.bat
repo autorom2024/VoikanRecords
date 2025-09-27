@@ -6,7 +6,7 @@ color 0A
 
 :: =======================================================
 ::      BAT-ФАЙЛ З АВТОМАТИЧНИМ КЕРУВАННЯМ ВЕРСІЯМИ
-::               (Voikan Records - v3)
+::               (Voikan Records - v3.1)
 :: =======================================================
 
 echo.
@@ -73,6 +73,15 @@ if not defined CURRENT_VERSION (
     echo.
     echo [WARNING] Fail z versiyeyu ne znaideno.
     set /p CURRENT_VERSION="Vvedit pochatkovu versiyu (napr. 1.0.4): "
+    
+    :: <<< ВИПРАВЛЕННЯ ТУТ
+    if not defined CURRENT_VERSION (
+        echo [ERROR] Pochatkova versiya ne mozhe buti porozhnioyu!
+        color 0C
+        pause
+        exit /b
+    )
+    :: >>> КІНЕЦЬ ВИПРАВЛЕННЯ
 ) else (
     echo [INFO] Potochna versiya: %CURRENT_VERSION%
 )
@@ -89,9 +98,9 @@ set /a new_patch=%patch% + 1
 set NEW_VERSION=%major%.%minor%.%new_patch%
 
 echo.
+set "version_tag="
 set /p version_tag="Avtomatychno proponuyetsya versiya: %NEW_VERSION%. Natisnit Enter, shchob pidtverditi, abo vvedit svoyu: "
 
-:: Якщо користувач нічого не ввів, використовуємо запропоновану версію
 if "%version_tag%"=="" set version_tag=%NEW_VERSION%
 
 :: --- КРОК 4: СТВОРЕННЯ ТА ВІДПРАВКА ТЕГУ ---
@@ -100,18 +109,24 @@ echo.
 echo [INFO] Stvoryuyu teg %full_tag%...
 git tag %full_tag%
 
+if errorlevel 1 (
+    echo [ERROR] Ne vdalosya stvoriti teg. Mozhlivo, vin vzhe isnuue.
+    color 0C
+    pause
+    exit /b
+)
+
 echo [INFO] Vidpravlyayu teg %full_tag% na GitHub dlya pochatku bildu...
 git push origin %full_tag%
 
 if errorlevel 1 (
-    echo [ERROR] Ne vdalosya vidpraviti teg. Mozhlivo, vin vzhe isnuue.
+    echo [ERROR] Ne vdalosya vidpraviti teg. Mozhlivo, vin vzhe isnuue na serveri.
     git tag -d %full_tag% > nul
     color 0C
     pause
     exit /b
 )
 
-:: Оновлюємо файл з версією, ТІЛЬКИ ЯКЩО все пройшло успішно
 echo %version_tag% > "%VERSION_FILE%"
 echo [OK] Versiyu u faili %VERSION_FILE% onovleno na %version_tag%.
 echo.
