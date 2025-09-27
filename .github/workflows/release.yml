@@ -10,26 +10,39 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4 # Updated from v3
+      # 1) Отримати код
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      # 2) Python 3.11 (актуальний екшен)
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
 
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+      # 3) Оновити базові інструменти
+      - name: Upgrade pip/setuptools/wheel
+        run: python -m pip install --upgrade pip setuptools wheel
 
+      # 4) Встановити ЛЕГКІ залежності з requirements.txt (без важких кодеків/torch)
       - name: Install dependencies (light)
         run: pip install -r requirements.txt
 
-      - name: Build executable with PyInstaller
+      # 5) Встановити PyInstaller (раніше в workflow не ставився)
+      - name: Install PyInstaller
+        run: pip install pyinstaller pyinstaller-hooks-contrib
+
+      # 6) Зібрати exe
+      - name: Build EXE
         run: pyinstaller --onefile --windowed --name "Voikan" --icon=assets/icons/video.ico main.py
 
-      - name: Upload artifact (Voikan.exe)
-        uses: actions/upload-artifact@v4 # Updated from v3
+      # 7) Завантажити артефакт (актуальна v4)
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: Voikan
           path: dist/Voikan.exe
+          if-no-files-found: error
+
 
