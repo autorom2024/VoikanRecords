@@ -1,0 +1,43 @@
+name: Build Voikan Records (light)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
+
+    - name: Install light requirements
+      run: pip install -r requirements-light.txt
+
+    - name: Build with PyInstaller
+      run: pyinstaller --onefile --windowed --name "Voikan" --icon=assets/icons/video.ico main.py
+
+    - name: Install 7zip
+      run: choco install 7zip -y
+
+    - name: Package EXE
+      run: 7z a Voikan_light.zip dist/Voikan.exe
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Voikan-light
+        path: Voikan_light.zip
+
