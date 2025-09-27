@@ -1,4 +1,3 @@
-# Це твій файл release.yml, але з виправленнями
 name: Build and Release
 
 on:
@@ -6,33 +5,30 @@ on:
     tags:
       - "v*.*.*"
 
+# <<< ДОДАНО ЦЕЙ БЛОК
+permissions:
+  contents: write
+# >>> КІНЕЦЬ БЛОКУ
+
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
       - name: Install dependencies
         run: pip install -r requirements.txt --timeout=600
-
       - name: Install PyInstaller
         run: pip install pyinstaller
-
       - name: Build executable
-        # ВИПРАВЛЕНО: Змінюємо назву на VoikanInstaller, щоб вона збігалася з updater.py
         run: pyinstaller --onefile --name VoikanInstaller main.py
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          # ВИПРАВЛЕНО: Оновлюємо назву та шлях, щоб все було однаково
           name: VoikanInstaller
           path: dist/VoikanInstaller.exe
 
@@ -43,14 +39,11 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          # ВИПРАВЛЕНО: Використовуємо оновлену назву артефакту
           name: VoikanInstaller
           path: ./dist
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          # ВИПРАВЛЕНО: Вказуємо на файл з правильною назвою для релізу
           files: ./dist/VoikanInstaller.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
