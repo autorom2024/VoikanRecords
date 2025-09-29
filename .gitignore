@@ -67,6 +67,7 @@ credentials.json
 *.sqlite
 secrets/
 .env
+.json
 
 fix_secrets_and_push.bat
 push_updates.bat
