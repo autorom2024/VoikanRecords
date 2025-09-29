@@ -1,0 +1,35 @@
+# ==================================
+#  ВАЖКІ БІБЛІОТЕКИ (AI-РУШІЙ)
+#  Будуть встановлюватись при першому запуску програми
+# ==================================
+
+# --- PyTorch з підтримкою CUDA 11.8 ---
+# ВАЖЛИВО: цей рядок каже pip, звідки завантажувати torch
+--index-url https://download.pytorch.org/whl/cu118
+
+torch==2.3.1
+torchaudio==2.3.1
+torchvision==0.18.1
+
+# --- AI та обробка аудіо/відео ---
+torchcrepe==0.0.24
+librosa==0.10.2
+numba==0.60.0
+llvmlite==0.43.0
+scikit-learn==1.5.1
+scipy==1.14.0
+pydub==0.25.1
+soundfile==0.12.1
+mutagen==1.47.0
+soxr==0.3.7
+webrtcvad==2.0.10
+openai==1.35.13
+
+# --- Обробка відео (залежність MoviePy) ---
+moviepy==1.0.3
+imageio==2.34.2
+imageio-ffmpeg==0.5.1
+
+# --- Моніторинг GPU ---
+GPUtil==1.4.0
+pynvml==11.5.0
