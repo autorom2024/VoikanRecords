@@ -1,0 +1,81 @@
+# ==================================
+#  .gitignore for Voikan Records
+# ==================================
+
+# --- Python кеш та артефакти ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Віртуальне середовище ---
+venv/
+.venv/
+
+# --- Артефакти збірки (PyInstaller) ---
+*.spec
+build/
+dist/
+build_root/
+Output/
+
+# --- Специфічні папки та файли Voikan Records ---
+_cache/
+
+# Папки з секретними даними
+credentials/
+tokens/
+
+# Файли баз даних та серіалізовані об'єкти
+*.db
+*.sqlite3
+*.pkl
+*.pickle
+
+# JSON: тільки секретні
+credentials/*.json
+tokens/*.json
+
+# --- Файли IDE ---
+.vscode/
+.idea/
+
+# Локальні службові файли
+push_updates.bat
+_version.txt
+echo credentials/>> .gitignore
+echo yt_tokens/>> .gitignore
+echo tokens/>> .gitignore
+echo credentials.json>> .gitignore
+echo token.json>> .gitignore
+echo token_autofill.json>> .gitignore
+echo photo_qt_config.json>> .gitignore
+echo photo_qt_presets.json>> .gitignore
+echo video_eq_presets.json>> .gitignore
+echo video_qt_config.json>> .gitignore
+echo video_user_presets.json>> .gitignore
+echo Output/>> .gitignore
+echo build_root/>> .gitignore
+# tokens & secrets
+token_autofill.json
+photo_qt_config.json
+photo_qt_presets.json
+client_secret.json
+credentials.json
+*.pkl
+*.db
+*.sqlite
+secrets/
+.env
+
+
+token_autofill.json
+photo_qt_config.json
+photo_qt_presets.json
+client_secret.json
+credentials.json
+*.pkl
+*.db
+*.sqlite
+secrets/
+.env

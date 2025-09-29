@@ -1,0 +1,1 @@
+@powershell -Command "Expand-Archive -Path '%~1\python-3.11.9-embed-amd64.zip' -DestinationPath '%~2\python' -Force"
