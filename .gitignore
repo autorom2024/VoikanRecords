@@ -84,3 +84,10 @@ credentials.json
 *.sqlite
 secrets/
 .env
+# secrets
+client_secret.json
+*_config.json
+export_*.json
+*.pkl
+*.db
+*.sqlite
