@@ -68,7 +68,10 @@ credentials.json
 secrets/
 .env
 
-
+fix_secrets_and_push.bat
+push_updates.bat
+prepare_build_root.bat
+client_secret.json
 token_autofill.json
 photo_qt_config.json
 photo_qt_presets.json
